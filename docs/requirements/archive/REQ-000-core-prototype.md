@@ -1,3 +1,17 @@
+---
+requirement_id: REQ-000
+title: 焊接知识图谱最简原型
+status: completed
+version: 1.0.0
+created_at: 2026-08-16
+updated_at: 2026-08-16
+depends_on: []
+supersedes: null
+repository: mjian200-spec/gmawgraph
+baseline_branch: main
+implementation_status: completed
+---
+
 # 焊接知识图谱最简原型编程规范
 
 ## 1. 目标与边界

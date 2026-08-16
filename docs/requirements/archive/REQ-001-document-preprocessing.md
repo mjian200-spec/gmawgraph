@@ -1,3 +1,17 @@
+---
+requirement_id: REQ-001
+title: GMAW文档结构化预处理
+status: completed
+version: 2.1.0
+created_at: 2026-08-16
+updated_at: 2026-08-16
+depends_on: []
+supersedes: null
+repository: mjian200-spec/gmawgraph
+baseline_branch: main
+implementation_status: completed
+---
+
 # GMAW 文档结构化预处理任务书（v2）
 
 ## 技术标准：供后续智能体执行时参考

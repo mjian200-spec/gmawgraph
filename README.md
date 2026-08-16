@@ -1,5 +1,9 @@
 # GMAWGraph — 焊接知识图谱原型
 
+> 需求与技术决策的唯一权威入口是
+> [`docs/requirements/`](docs/requirements/README.md)；开始需求工作前请按
+> `manifest.yaml` 所列顺序阅读。
+
 验证闭环（已实现三个阶段）：
 
 ```text
@@ -189,8 +193,9 @@ python scripts/recommend_adjustment.py \
 
 OCR 解析结果 → 按标题组织、保持阅读顺序的结构化文档（`data/docprep/`
 生成物，.gitignore 已忽略），供文本抽取与后续 VLM 处理。本模块不理解
-图片/表格工艺内容；文档处理的规范与验收见
-`src/welding_kg/docprep/`（任务书 v2、README、CLAUDE.md）。
+图片/表格工艺内容；模块用法见 `src/welding_kg/docprep/README.md`，已完成的
+规范与验收依据归档于
+`docs/requirements/archive/REQ-001-document-preprocessing.md`。
 
 ```bash
 # 只读审计 / 完整预处理（含 33 张表格图片的 PDF 补裁）/ 当前输出校验

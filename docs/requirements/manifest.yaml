@@ -1,0 +1,26 @@
+schema_version: 1
+
+current_phase: entity_extraction
+
+active_requirements:
+  - id: REQ-002
+    path: active/REQ-002-entity-extraction.md
+    status: approved
+    priority: P0
+
+required_decisions:
+  - decisions/ADR-001-graph-layers.md
+  - decisions/ADR-002-model-pipeline.md
+
+completed_requirements:
+  - id: REQ-000
+    path: archive/REQ-000-core-prototype.md
+  - id: REQ-001
+    path: archive/REQ-001-document-preprocessing.md
+
+agent_read_order:
+  - README.md
+  - manifest.yaml
+  - active/REQ-002-entity-extraction.md
+  - decisions/ADR-001-graph-layers.md
+  - decisions/ADR-002-model-pipeline.md

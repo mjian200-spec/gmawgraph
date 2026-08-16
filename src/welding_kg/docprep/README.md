@@ -4,7 +4,8 @@
 **按标题组织、保持原始阅读顺序、可供文本抽取和 VLM 处理的结构化文档**。
 本模块是 GMAWGraph 的文档处理与图谱构建前置模块。
 
-> 工作规则见 [CLAUDE.md](CLAUDE.md)；任务书见 [gmaw_document_preprocessing_task.md](gmaw_document_preprocessing_task.md)。
+> 工作规则见 [CLAUDE.md](CLAUDE.md)；已完成的任务书见
+> [REQ-001](../../../docs/requirements/archive/REQ-001-document-preprocessing.md)。
 > 版本历史：v2.0.0 独立项目（DocProduce）→ v2.1.0 融合进 GMAWGraph
 > （路径与包名变更，输出结构不变）。
 

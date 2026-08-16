@@ -2,7 +2,8 @@
 
 本目录（`src/welding_kg/docprep/`）实现《GMAW 文档结构化预处理任务书（v2）》，
 是 GMAWGraph 的文档处理与图谱构建前置模块。**工作前必须完整阅读：**
-`gmaw_document_preprocessing_task.md`（验收依据）、`README.md`（下游用法）、
+`../../../docs/requirements/archive/REQ-001-document-preprocessing.md`（已完成的验收依据）、
+`README.md`（下游用法）、
 GMAWGraph 根目录 README 与 tests/README.md（项目约定）。
 
 ## 铁律 1：结论必须由证据计算，禁止声明
