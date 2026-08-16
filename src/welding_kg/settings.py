@@ -66,3 +66,36 @@ def load_retrieval_config() -> dict:
     """加载 retrieval.yaml（检索过滤、权重与 Top-K，规范 §10）。"""
     with open(CONFIG_DIR / "retrieval.yaml", encoding="utf-8") as f:
         return yaml.safe_load(f)
+
+
+@lru_cache(maxsize=1)
+def load_adjustment_config() -> dict:
+    """加载并校验 adjustment.yaml（修正量置信度权重与阈值，
+    adjustment_generation_spec §13、验收规范 P1）。
+
+    置信度权重必须非负且总和为 1，设备未知范围折算分必须在 [0, 1]；
+    配置非法直接抛错，不静默回退默认值。
+    """
+    with open(CONFIG_DIR / "adjustment.yaml", encoding="utf-8") as f:
+        cfg = yaml.safe_load(f)
+
+    weights = cfg.get("confidence_weights") or {}
+    total = 0.0
+    for key in ("similarity", "knowledge", "case_support", "consensus", "equipment"):
+        value = weights.get(key)
+        if value is None or float(value) < 0:
+            raise ValueError(
+                f"adjustment.yaml 的置信度权重缺失或为负：{key}={value!r}"
+            )
+        total += float(value)
+    if abs(total - 1.0) > 1e-9:
+        raise ValueError(
+            f"adjustment.yaml 置信度权重之和必须为 1，当前为 {total}"
+        )
+
+    credit = float(cfg.get("equipment", {}).get("unknown_range_credit", 0.0))
+    if not 0.0 <= credit <= 1.0:
+        raise ValueError(
+            f"adjustment.yaml equipment.unknown_range_credit 必须在 [0, 1]，当前为 {credit}"
+        )
+    return cfg

@@ -1,0 +1,38 @@
+# 焊接参数修正量生成配置（adjustment_generation_spec §13/§11/§9）
+# 参数步长不在此配置中：必须查询图谱 Equipment-LIMITS→Parameter 关系（规范 §4）
+
+# 置信度权重：confidence = Σ(weight × score)，分项均为 0—1（规范 §13）
+# 权重必须非负且总和为 1，加载时校验（settings.load_adjustment_config）
+confidence_weights:
+  similarity: 0.30
+  knowledge: 0.25
+  case_support: 0.15
+  consensus: 0.15
+  equipment: 0.15
+
+# 最高分低于该阈值时标记为低置信度建议（规范 §13）
+low_confidence_threshold: 0.5
+
+# 设备约束核验（验收规范 P1：约束未知时不得视为完全满足）
+equipment:
+  # 设备只有文字 range_rule、无数值上下限时，范围核验的折算分。
+  # 已核验与未核验的约束分别写入告警，不编造上下限。
+  unknown_range_credit: 0.5
+
+# 设备步长来源置信度默认值：图谱关系未给出 confidence 属性时使用（规范 §4/§13）
+step_confidence:
+  manual: 1.0            # adjustment_step：说明书或设备配置给出的正式步长
+  project_default: 0.8   # default_step：图谱显式保存的项目默认值
+
+# 案例幅度估计（规范 §9）
+case_delta:
+  min_valid_for_full_support: 3   # 有效差值达到该数量时案例支持不扣数量分
+  fallback_support_factor: 0.25   # 退化为单设备步长时案例支持的保留比例
+  unknown_dispersion_penalty: 0.5 # 仅 1 个有效差值时无法计算离散度，取该惩罚值
+  step_rule_penalty: 0.8          # 相对大小标签退化为步数规则时的案例支持系数（规范 §11）
+
+# 相对大小标签（规范 §11）：至少 3 个有效差值按绝对值分位点划分
+magnitude:
+  min_cases_for_quantiles: 3
+  quantile_medium: 0.33
+  quantile_large: 0.67

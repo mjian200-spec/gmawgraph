@@ -1,20 +1,24 @@
-# GMAWGraph — 焊接知识图谱最简原型（第一阶段）
+# GMAWGraph — 焊接知识图谱原型
 
-验证最小闭环：
+验证闭环（已实现三个阶段）：
 
 ```text
 焊接需求 → 最相似案例 → 需求差异 → 图谱多跳路径 → LLM 路径选择
+                        ↓
+需求 + 相似案例 + 图谱知识 + 设备步长 → 修正方案 → 置信度排序 → 推荐参数
 ```
 
-本阶段不做 PDF/OCR 自动抽取、参数修正量、最终推荐与正式测试；
+已实现参数修正量生成（`adjustment_generation_spec`）与正式测试（单元 +
+集成分组，见「测试」一节）；不做 PDF/OCR 自动抽取；
 Neo4j 不保存证据原文，只保存外部引用 `source_refs`。
 
 ## 环境与依赖
 
-- conda 环境：`/ENV/Anaconda/envs/jm/GMAWGraph`（Python 3.11），`vllm==0.19.1` 部署大模型
+- conda 环境：`/ENV/Anaconda/envs/jm/GMAWGraph`（Python 3.11.15），`vllm==0.19.1` 部署大模型
 - Neo4j 5.17 Community：`/DATA/jm/neo4j/GMAWGraph`（Bolt 7200 / HTTP 7201）
 - 大模型：Qwen3-32B（vLLM OpenAI 兼容接口，端口 8000）
 - 嵌入模型：BGE-M3（vLLM 嵌入接口，端口 8001）
+- Python 依赖面向 OpenAI 3.x SDK（`openai>=3.0,<4` + `httpx2`，见 pyproject.toml）
 
 启动服务（若未运行）：
 
@@ -104,21 +108,69 @@ final = 0.8 * structured + 0.2 * semantic                   # BGE-M3 余弦
   joint_type_changed | joint_type_same
   position_changed | position_same
   shielding_gas_changed | shielding_gas_same
+
+位置方向差异（adjustment_generation_spec §8，目标为立焊/仰焊时替代
+position_changed，直接衔接图谱 SUGGESTS_ADJUSTMENT 规则起点）：
+  position_to_vertical | position_to_overhead
 ```
 
-## 冒烟实验（本机验证）
+## 冒烟实验与测试（本机验证）
 
 合成冒烟数据位于 `data/smoke/`（**全部为合成测试数据，非书中知识**）：
 所有唯一键带 `smoke_` 前缀，与真实数据（mini_test）零冲突，
-且运行结束自动清理、不在库中留测试数据。覆盖导入幂等、检索排序、
-差异计算、路径查询与 LLM 选择：
+且运行结束自动清理、不在库中留测试数据：
 
 ```bash
-python scripts/run_smoke.py        # 合成数据冒烟（12 项）
-python scripts/test_mini_data.py   # 真实模拟数据测试（导入核验/检索/路径/LLM）
+/ENV/Anaconda/envs/jm/GMAWGraph/bin/python scripts/run_smoke.py        # 合成数据冒烟（12 项，需 Neo4j/LLM/BGE）
+/ENV/Anaconda/envs/jm/GMAWGraph/bin/python scripts/test_mini_data.py   # 真实模拟数据测试（需 Neo4j/LLM/BGE）
+```
+
+正式测试分两组（详见 `tests/README.md`）：
+
+```bash
+# 单元测试：纯函数 + FakeStore + LLM 桩，无外部服务也必须全部通过
+/ENV/Anaconda/envs/jm/GMAWGraph/bin/python -m pytest -q -m "not integration"
+
+# 集成测试：强制真实 Neo4j；BGE/LLM 当前允许安全降级
+/ENV/Anaconda/envs/jm/GMAWGraph/bin/python -m pytest -q -m integration
+
+# 全部测试
+/ENV/Anaconda/envs/jm/GMAWGraph/bin/python -m pytest -q
 ```
 
 报告输出到 `data/smoke/report/`。
+
+## 修正量生成（adjustment_generation_spec）
+
+在案例检索与图谱路径召回之后，生成多个独立修正方案并按置信度排序
+（只处理焊接电流、电压和速度；步长查询图谱，不在代码中硬编码）：
+
+```bash
+# 1. 导入图谱规则（Equipment-LIMITS→Parameter 携带设备步长）
+python scripts/import_graph.py data/seed/graph_seed.json
+
+# 2. 导入历史案例
+python scripts/import_cases.py data/seed/cases.json
+
+# 3. 修正量生成（输出 requirement_id, equipment_id, proposals,
+#    selected_proposal_id, warnings；--no-llm 跳过 LLM 摘要用程序化依据）
+python scripts/recommend_adjustment.py \
+  --requirement data/example_requirement.json \
+  --equipment crobotpos_arc_module \
+  --top-k 5 --proposal-count 3
+
+# 4. 测试（分组命令见上文「冒烟实验与测试」一节）：
+#    单元测试离线可跑；集成测试 Neo4j 不可达时直接失败、不跳过，
+#    正式验收必须两者都执行且无失败
+```
+
+置信度权重与阈值见 `config/adjustment.yaml`；职责边界：图谱决定方向与
+步长、案例估计幅度、Python 量化评分、LLM 只选完整知识路径和写一句话摘要。
+
+- 本版完成：真实图谱步长与独立知识路径、多案例并行候选、案例幅度估计、
+  步长量化、约束告警、置信度排序，以及 LLM 路径选择边界控制。
+- 待优化：补齐设备数值范围与缺失方向规则，增加可比较案例以减少单步退化，
+  并为 BGE/LLM 增加强制在线集成断言。
 
 ## 最低验收标准（规范 §15）
 

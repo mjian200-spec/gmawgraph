@@ -1,0 +1,13 @@
+{
+  "_comment": "修正量生成演示需求（adjustment_generation_spec §15）：取真实案例 crp_train_001 的同型工况（GMAW 碳钢 立内角 0.8mm 焊丝 100%CO2），板厚 5.0mm 作为查询输入，触发 thickness_increase 差异并演示多方案修正量生成。control_mode=separate 表示电压可独立设置（CrobotpOS 说明书第13页）。",
+  "requirement_id": "req_demo_001",
+  "process": "GMAW",
+  "material": "carbon_steel",
+  "thickness_mm": 5.0,
+  "joint_type": "inside_corner",
+  "position": "vertical",
+  "wire_diameter_mm": 0.8,
+  "shielding_gas": "CO2_100",
+  "target_quality": "penetration_depth",
+  "control_mode": "separate"
+}

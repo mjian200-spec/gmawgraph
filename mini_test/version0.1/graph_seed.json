@@ -104,6 +104,6 @@
 
     {"id":"limit:crobot_current","type":"LIMITS","from":"equipment:crobotpos_arc_module","to":"parameter:welding_current","properties":{"adjustment_step":5.0,"unit":"A","range_rule":"电流曲线匹配范围","control_modes":["一元","分别"],"source_refs":["CrobotpOS:pdf_p13:section_3-1-2","CrobotpOS:pdf_p40:section_5-1"]}},
     {"id":"limit:crobot_voltage","type":"LIMITS","from":"equipment:crobotpos_arc_module","to":"parameter:arc_voltage","properties":{"adjustment_step":0.2,"unit":"V","range_rule":"电压曲线匹配范围","unified_mode_rule":"实际焊接电压由焊接电流匹配，机器人设置值为百分比增益","separate_mode_rule":"焊接电压为机器人设置值，与焊接电流无关","source_refs":["CrobotpOS:pdf_p13:section_3-1-2","CrobotpOS:pdf_p40:section_5-1"]}},
-    {"id":"limit:crobot_speed","type":"LIMITS","from":"equipment:crobotpos_arc_module","to":"parameter:welding_speed","properties":{"setting_method":"ArcOn指令的VL参数","supports_direct_setting":true,"unit":"mm/s","source_refs":["CrobotpOS:pdf_p32:section_4-1-5"]}}
+    {"id":"limit:crobot_speed","type":"LIMITS","from":"equipment:crobotpos_arc_module","to":"parameter:welding_speed","properties":{"setting_method":"ArcOn指令的VL参数","supports_direct_setting":true,"default_step":0.5,"default_step_note":"训练案例最小观测分辨率（项目量化规则，非制造商限值）","unit":"mm/s","source_refs":["CrobotpOS:pdf_p32:section_4-1-5"]}}
   ]
 }
