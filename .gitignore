@@ -13,3 +13,7 @@ dist/
 # 数据与报告（种子数据与冒烟报告本地保留，不入库）
 data/seed/*.json
 data/smoke/report/
+
+# docprep 生成物（由 scripts/preprocess_document.py 生成，可重现）
+data/docprep/
+logs/

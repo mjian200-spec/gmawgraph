@@ -132,3 +132,29 @@ python scripts/test_mini_data.py   # 真实模拟数据测试（导入核验/检
 - [x] 证据原文不进入 Neo4j
 - [x] 无数据场景返回清晰 warning
 - [x] README 包含完整执行命令
+
+## 文档结构化预处理（welding_kg.docprep，原 DocProduce 已融合）
+
+OCR 解析结果 → 按标题组织、保持阅读顺序的结构化文档（`data/docprep/`
+生成物，.gitignore 已忽略），供文本抽取与后续 VLM 处理。本模块不理解
+图片/表格工艺内容；文档处理的规范与验收见
+`src/welding_kg/docprep/`（任务书 v2、README、CLAUDE.md）。
+
+```bash
+# 只读审计 / 完整预处理（含 33 张表格图片的 PDF 补裁）/ 当前输出校验
+python scripts/preprocess_document.py audit
+python scripts/preprocess_document.py run
+python scripts/preprocess_document.py validate
+
+# 回归测试（17 条验收标准）与资源完整性检查
+python -m pytest -q tests/test_docprep.py
+python tests/check_docprep_assets.py
+```
+
+- 主输出 `data/docprep/document_structure.json`：sections（content 有序流：
+  text_segment / figure / table / subsection），递归遍历恢复完整阅读顺序；
+  figure/table 项含 `asset_path`（parsed_asset 或 pdf_crop）、`caption`、
+  `bbox` 与 `source_ref`。
+- 图谱衔接：Neo4j 只保存外部引用 `source_refs`；`source_registry.json`
+  提供 source_ref → PDF 页码/bbox 回溯，与图谱证据引用约定一致。
+- 统计：章节 427、文本段 788、图片 741、表格 193（含 33 张 pdf_crop）。

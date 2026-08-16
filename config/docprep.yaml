@@ -1,0 +1,104 @@
+# GMAW 文档结构化预处理配置（任务书 v2，GMAWGraph 模块版）
+# 模块：welding_kg.docprep（原 DocProduce，已融合进 GMAWGraph）
+# 相对路径基于本配置文件所在目录（GMAWGraph/config/）解析。
+# 说明见 src/welding_kg/docprep/README.md；所有阈值与启发式规则集中于此。
+
+document:
+  id: GMAW
+  version: v2
+  title: 气体保护焊工艺基础及应用
+  source_pdf: ../../GMAW/hybrid_ocr/GMAW(OCR)_origin.pdf
+  parsed_json: ../../GMAW/hybrid_ocr/GMAW(OCR)_content_list_v2.json
+  parser_name: hybrid_ocr
+  parser_version: unknown
+  preprocess_version: 2.1.0
+
+paths:
+  output_dir: ../data/docprep
+  log_dir: ../logs
+  assets_dir: ../data/docprep/assets
+
+page:
+  # bbox 坐标系页面边界：由解析 JSON 实测推导（解析器输出为扫描图像素坐标，
+  # 非 PDF pt 坐标），验证 bbox 越界时使用
+  bounds: [0, 0, 1000, 1040]
+  bbox_tolerance: 10
+  pdf_pages_expected: 471
+  front_matter_pdf_pages: [0, 10]   # 封面/CIP/序/前言/目录（含 TOC 页）
+  first_body_page: 11
+  margin_x0: 880                   # 超出此 x 视为页边标注（竖排章标题）
+  column_gap: 250                  # x 中心聚类间隙阈值：超过视为分栏
+
+block_types:                        # 原始解析类型 → 标准块类型（任务书 5.2）
+  title: heading
+  paragraph: paragraph
+  table: table
+  image: figure
+  list: list_item
+  equation_interline: formula
+  page_header: page_header
+  page_footer: page_footer
+  page_number: page_number
+  page_footnote: page_footnote
+  page_aside_text: page_aside_text
+
+source_ref_codes:                   # 标准块类型 → source_ref 类型码
+  heading: heading
+  paragraph: para
+  table: table
+  table_title: tabtitle
+  table_note: tabnote
+  figure: fig
+  figure_title: figtitle
+  formula: form
+  list_item: list
+  page_header: header
+  page_footer: footer
+  page_number: pagenum
+  page_footnote: footnote
+  page_aside_text: aside
+  unknown: unk
+
+exclude_from_extraction: [page_header, page_footer, page_number, page_aside_text]
+
+heading:
+  level_patterns:
+    - {regex: "^第[0-9０-９一二三四五六七八九十百]+章", level: 1}
+    - {regex: "^\\d+\\.\\d+\\.\\d+", level: 3}
+    - {regex: "^\\d+\\.\\d+", level: 2}
+    - {regex: "^\\d+\\.", level: 4}
+    - {regex: "^[（(]\\d+[）)]", level: 5}
+    - {regex: "^\\d+[）)]", level: 6}
+  unnumbered_level1: [前言, 序, 目录, 参考文献, 附录, 索引]
+  appendix_pattern: "^附录\\s*[A-Za-z]"
+  appendix_level: 2                 # 附录A/B/C 挂在“附录”之下
+  front_matter_prefix: "front:"     # 前辅文标题的章节编号前缀（避免与正文重号）
+  level_jump_flag: true             # 层级跳跃标记为待复核（不阻断）
+  cross_line_gap: 40
+
+text_clean:
+  collapse_spaces: true             # 折叠连续空格
+  strip_cjk_punct_spaces: true      # 清理 CJK 标点两侧空格
+  fullwidth_unify: true             # 数字/单位上下文中的全角符号统一（局部）
+  range_symbol_unify: true          # 数字之间 ～–— → ~（ASCII 连字符不动，防负号混淆）
+  strip_header_prefix: true         # 剥离正文段落首部的页眉残留
+
+fusion:
+  text_types: [paragraph, list_item, formula, page_footnote, unknown]
+  visual_types: [figure, table]
+
+association:
+  caption_gap: 60                   # 图/表与独立题注块的垂直间隙阈值
+  caption_pattern: "^[图表]\\s*\\d+[-－—–~]?\\d*"
+  min_confidence: 0.6
+
+assets:
+  pdf_crop:
+    margin_ratio: 0.10              # 按 bbox 裁剪时的边距比例
+    dpi: 150
+  x_scale: 0.7485                   # bbox 空间 → PDF pt 经验映射（x）
+  y_scale: 1.0                      # bbox 空间 → PDF pt 经验映射（y）
+
+validation:
+  forbidden_fields: [entity, entities, relation, relations, ProcessWindow, EffectRule, AdjustmentRule, process_window, effect_rule, adjustment_rule, extraction, knowledge, triple]
+  source_ref_pattern: "^GMAW:v2:pdfp\\d{4}:[a-z]+\\d{2,}$"
