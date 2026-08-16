@@ -1,0 +1,42 @@
+# 多图层本体白名单与唯一键（规范 §4、§6）
+# 节点 label 与关系类型必须先映射到本白名单，方可写入数据库
+node_types:
+  Case:
+    unique_key: case_id
+    description: 历史工艺案例
+  Condition:
+    unique_key: code
+    description: 工况概念和差异条件
+  Parameter:
+    unique_key: code
+    description: 可调焊接参数
+  Mechanism:
+    unique_key: code
+    description: 电弧、熔滴和熔池机理
+    # 机理层仅允许三种取值（规范 §4）
+    allowed_layers: [arc, transfer, pool]
+  Quality:
+    unique_key: code
+    description: 尺寸、性能和缺陷
+  Equipment:
+    unique_key: equipment_id
+    description: 焊机能力和限制
+
+# 关系白名单：type → 允许的 [起点 label, 终点 label] 组合（规范 §4）
+relationship_types:
+  HAS_CONDITION:
+    - [Case, Condition]
+  HAS_PARAMETER:
+    - [Case, Parameter]
+  HAS_RESULT:
+    - [Case, Quality]
+  SUGGESTS_ADJUSTMENT:
+    - [Condition, Parameter]
+  AFFECTS:
+    - [Parameter, Mechanism]
+    - [Mechanism, Mechanism]
+    - [Mechanism, Quality]
+  DETERMINES:
+    - [Mechanism, Mechanism]
+  LIMITS:
+    - [Equipment, Parameter]

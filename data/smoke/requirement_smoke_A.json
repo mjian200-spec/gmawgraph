@@ -1,0 +1,11 @@
+{
+  "_comment": "冒烟需求A（SYNTHETIC）：与 case_smoke_002 完全一致，用于验证检索 Top-1 正确性。",
+  "process": "MIG",
+  "material": "Q235",
+  "thickness_mm": 8.0,
+  "joint_type": "对接",
+  "position": "平焊",
+  "wire_diameter_mm": 1.2,
+  "shielding_gas": "CO2",
+  "target_quality": "penetration"
+}

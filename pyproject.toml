@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "welding-kg"
+version = "0.1.0"
+description = "焊接知识图谱最简原型：案例检索 → 需求差异 → 图谱多跳路径 → LLM 路径选择"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.7",
+    "PyYAML>=6.0",
+    "neo4j>=5.20",
+    "openai>=1.40",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# pytest 仅预留配置，正式测试在下一任务实现（规范 §2/§16）
+[tool.pytest.ini_options]
+testpaths = ["tests"]

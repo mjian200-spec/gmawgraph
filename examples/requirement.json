@@ -1,0 +1,11 @@
+{
+  "_comment": "演示需求（值域与 mini_test 真实数据契约一致，见 source_validation.md §2.2）：取真实案例 crp_train_001 的同型工况（GMAW 碳钢 1mm 立内角 0.8 焊丝 100%CO2），板厚 5.0mm 作为查询输入，用于触发 thickness_increase 差异并演示全链路推理。",
+  "process": "GMAW",
+  "material": "carbon_steel",
+  "thickness_mm": 5.0,
+  "joint_type": "inside_corner",
+  "position": "vertical",
+  "wire_diameter_mm": 0.8,
+  "shielding_gas": "CO2_100",
+  "target_quality": "penetration_depth"
+}

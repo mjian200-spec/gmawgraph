@@ -1,0 +1,28 @@
+# 案例检索配置（规范 §10）
+# 先按 process 过滤，再进行混合相似度排序：final = 0.8*structured + 0.2*semantic
+filter_field: process
+structured_weight: 0.8
+semantic_weight: 0.2
+top_k: 5
+
+# 结构化字段与权重；缺失字段不计分，其余权重重新归一化
+# type: categorical 相同得 1、不同得 0；numeric 用相对距离公式打分
+structured_fields:
+  material:
+    type: categorical
+    weight: 1.0
+  thickness_mm:
+    type: numeric
+    weight: 1.0
+  joint_type:
+    type: categorical
+    weight: 1.0
+  position:
+    type: categorical
+    weight: 1.0
+  wire_diameter_mm:
+    type: numeric
+    weight: 1.0
+  shielding_gas:
+    type: categorical
+    weight: 1.0

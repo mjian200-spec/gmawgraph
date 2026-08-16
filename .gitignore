@@ -1,0 +1,15 @@
+# 环境与凭据
+.env
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# 数据与报告（种子数据与冒烟报告本地保留，不入库）
+data/seed/*.json
+data/smoke/report/

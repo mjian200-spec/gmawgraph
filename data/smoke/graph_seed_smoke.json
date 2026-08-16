@@ -1,0 +1,42 @@
+{
+  "_comment": "冒烟实验合成图规则数据（SYNTHETIC）。全部内容为工程测试数据，不来自任何书籍或真实工艺案例，不得用于正式知识库。所有唯一键带 smoke_ 前缀，与真实数据（mini_test）永不冲突。",
+  "nodes": [
+    {"id": "condition:smoke_thickness_increase", "label": "Condition", "properties": {"code": "smoke_thickness_increase", "name": "板厚增加", "definition": "合成测试条件：母材板厚相比基准案例增大", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "condition:smoke_position_changed", "label": "Condition", "properties": {"code": "smoke_position_changed", "name": "焊接位置变化", "definition": "合成测试条件：焊接位置相比基准案例改变", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "condition:smoke_wire_diameter_increase", "label": "Condition", "properties": {"code": "smoke_wire_diameter_increase", "name": "焊丝直径增大", "definition": "合成测试条件：焊丝直径相比基准案例增大", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "parameter:smoke_welding_current", "label": "Parameter", "properties": {"code": "smoke_welding_current", "name": "焊接电流", "definition": "合成测试参数：焊接电流", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "parameter:smoke_welding_voltage", "label": "Parameter", "properties": {"code": "smoke_welding_voltage", "name": "焊接电压", "definition": "合成测试参数：焊接电压", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "parameter:smoke_welding_speed", "label": "Parameter", "properties": {"code": "smoke_welding_speed", "name": "焊接速度", "definition": "合成测试参数：焊接速度", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "parameter:smoke_gas_flow", "label": "Parameter", "properties": {"code": "smoke_gas_flow", "name": "保护气体流量", "definition": "合成测试参数：保护气体流量", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "mechanism:smoke_arc_heat", "label": "Mechanism", "properties": {"code": "smoke_arc_heat", "name": "电弧热输入", "definition": "合成测试机理：电弧对工件的热输入", "layer": "arc", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "mechanism:smoke_melting_rate", "label": "Mechanism", "properties": {"code": "smoke_melting_rate", "name": "焊丝熔化速度", "definition": "合成测试机理：焊丝熔化速度", "layer": "arc", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "mechanism:smoke_droplet_transfer", "label": "Mechanism", "properties": {"code": "smoke_droplet_transfer", "name": "熔滴过渡", "definition": "合成测试机理：熔滴过渡行为", "layer": "transfer", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "mechanism:smoke_pool_shape", "label": "Mechanism", "properties": {"code": "smoke_pool_shape", "name": "熔池形状", "definition": "合成测试机理：熔池几何形态", "layer": "pool", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "quality:smoke_penetration", "label": "Quality", "properties": {"code": "smoke_penetration", "name": "熔深质量", "definition": "合成测试质量项：熔深是否达标", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "quality:smoke_fusion", "label": "Quality", "properties": {"code": "smoke_fusion", "name": "熔合质量", "definition": "合成测试质量项：熔合是否良好", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "quality:smoke_spatter", "label": "Quality", "properties": {"code": "smoke_spatter", "name": "飞溅", "definition": "合成测试质量项：飞溅程度", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "equipment:smoke_welder_A", "label": "Equipment", "properties": {"equipment_id": "smoke_welder_A", "name": "焊接电源A", "definition": "合成测试设备：最大输出电流 500A", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "equipment:smoke_feeder_A", "label": "Equipment", "properties": {"equipment_id": "smoke_feeder_A", "name": "送丝机构A", "definition": "合成测试设备：最大送丝速度对应焊接速度 20mm/s", "source_refs": ["SYNTHETIC:smoke:v2"]}}
+  ],
+  "relationships": [
+    {"id": "rule:001", "type": "SUGGESTS_ADJUSTMENT", "from": "condition:smoke_thickness_increase", "to": "parameter:smoke_welding_current", "properties": {"target_change": "increase", "condition_text": "板厚增加时需要更大电流保证熔透", "confidence": 0.9, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:002", "type": "SUGGESTS_ADJUSTMENT", "from": "condition:smoke_thickness_increase", "to": "parameter:smoke_welding_speed", "properties": {"target_change": "decrease", "condition_text": "板厚增加时适当降低焊接速度", "confidence": 0.8, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:003", "type": "SUGGESTS_ADJUSTMENT", "from": "condition:smoke_position_changed", "to": "parameter:smoke_welding_current", "properties": {"target_change": "decrease", "condition_text": "位置变化时通常降低电流防熔池下淌", "confidence": 0.85, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:004", "type": "SUGGESTS_ADJUSTMENT", "from": "condition:smoke_position_changed", "to": "parameter:smoke_gas_flow", "properties": {"target_change": "increase", "condition_text": "位置变化时提高气体流量加强保护", "confidence": 0.7, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:005", "type": "SUGGESTS_ADJUSTMENT", "from": "condition:smoke_wire_diameter_increase", "to": "parameter:smoke_welding_current", "properties": {"target_change": "increase", "condition_text": "焊丝直径增大时需提高电流保证熔化", "confidence": 0.88, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:006", "type": "SUGGESTS_ADJUSTMENT", "from": "condition:smoke_wire_diameter_increase", "to": "parameter:smoke_welding_voltage", "properties": {"target_change": "increase", "condition_text": "焊丝直径增大时相应提高电压", "confidence": 0.75, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:101", "type": "AFFECTS", "from": "parameter:smoke_welding_current", "to": "mechanism:smoke_arc_heat", "properties": {"condition_text": "电流增大提升电弧热输入", "confidence": 0.95, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:102", "type": "AFFECTS", "from": "parameter:smoke_welding_current", "to": "mechanism:smoke_melting_rate", "properties": {"condition_text": "电流增大加快焊丝熔化", "confidence": 0.95, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:103", "type": "AFFECTS", "from": "parameter:smoke_welding_voltage", "to": "mechanism:smoke_arc_heat", "properties": {"condition_text": "电压升高加大电弧热输入", "confidence": 0.9, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:104", "type": "AFFECTS", "from": "parameter:smoke_welding_speed", "to": "mechanism:smoke_arc_heat", "properties": {"condition_text": "速度降低增加单位长度热输入", "confidence": 0.9, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:105", "type": "AFFECTS", "from": "parameter:smoke_welding_speed", "to": "mechanism:smoke_pool_shape", "properties": {"condition_text": "速度影响熔池形状", "confidence": 0.8, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:106", "type": "AFFECTS", "from": "mechanism:smoke_arc_heat", "to": "mechanism:smoke_pool_shape", "properties": {"condition_text": "热输入增大扩大熔池", "confidence": 0.9, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:107", "type": "AFFECTS", "from": "mechanism:smoke_melting_rate", "to": "mechanism:smoke_droplet_transfer", "properties": {"condition_text": "熔化速度影响熔滴过渡频率", "confidence": 0.85, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:108", "type": "DETERMINES", "from": "mechanism:smoke_droplet_transfer", "to": "mechanism:smoke_pool_shape", "properties": {"condition_text": "过渡方式决定熔池形态", "confidence": 0.8, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:109", "type": "AFFECTS", "from": "mechanism:smoke_droplet_transfer", "to": "quality:smoke_spatter", "properties": {"condition_text": "过渡方式决定飞溅水平", "confidence": 0.8, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:110", "type": "AFFECTS", "from": "mechanism:smoke_pool_shape", "to": "quality:smoke_penetration", "properties": {"condition_text": "熔池形状决定熔深", "confidence": 0.9, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:111", "type": "AFFECTS", "from": "mechanism:smoke_pool_shape", "to": "quality:smoke_fusion", "properties": {"condition_text": "熔池形状影响熔合", "confidence": 0.85, "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:201", "type": "LIMITS", "from": "equipment:smoke_welder_A", "to": "parameter:smoke_welding_current", "properties": {"max_value": 500, "unit": "A", "condition_text": "电源最大输出 500A", "source_refs": ["SYNTHETIC:smoke:v2"]}},
+    {"id": "rule:202", "type": "LIMITS", "from": "equipment:smoke_feeder_A", "to": "parameter:smoke_welding_speed", "properties": {"max_value": 20, "unit": "mm/s", "condition_text": "送丝机构限制焊接速度上限", "source_refs": ["SYNTHETIC:smoke:v2"]}}
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "_comment": "冒烟实验合成案例数据（SYNTHETIC）。全部内容为工程测试数据，不来自任何书籍或真实工艺案例，不得用于正式知识库。",
+  "cases": [
+    {
+      "case_id": "case_smoke_001",
+      "process": "MIG",
+      "material": "Q235",
+      "thickness_mm": 6.0,
+      "joint_type": "对接",
+      "position": "平焊",
+      "wire_diameter_mm": 1.2,
+      "shielding_gas": "CO2",
+      "welding_current_a": 240.0,
+      "welding_voltage_v": 26.0,
+      "welding_speed_mm_s": 8.0,
+      "retrieval_text": "MIG焊，Q235低碳钢，板厚6mm，对接接头，平焊位置，焊丝直径1.2mm，CO2保护气体",
+      "conditions": [
+        "condition:smoke_thickness_increase"
+      ],
+      "parameters": [
+        "parameter:smoke_welding_current",
+        "parameter:smoke_gas_flow"
+      ],
+      "results": [
+        "quality:smoke_fusion"
+      ]
+    },
+    {
+      "case_id": "case_smoke_002",
+      "process": "MIG",
+      "material": "Q235",
+      "thickness_mm": 8.0,
+      "joint_type": "对接",
+      "position": "平焊",
+      "wire_diameter_mm": 1.2,
+      "shielding_gas": "CO2",
+      "welding_current_a": 260.0,
+      "welding_voltage_v": 28.0,
+      "welding_speed_mm_s": 7.0,
+      "retrieval_text": "MIG焊，Q235低碳钢，板厚8mm，对接接头，平焊位置，焊丝直径1.2mm，CO2保护气体",
+      "conditions": [
+        "condition:smoke_thickness_increase"
+      ],
+      "parameters": [
+        "parameter:smoke_welding_current",
+        "parameter:smoke_welding_speed"
+      ],
+      "results": [
+        "quality:smoke_penetration",
+        "quality:smoke_fusion"
+      ]
+    },
+    {
+      "case_id": "case_smoke_003",
+      "process": "MIG",
+      "material": "不锈钢",
+      "thickness_mm": 8.0,
+      "joint_type": "角接",
+      "position": "立焊",
+      "wire_diameter_mm": 1.0,
+      "shielding_gas": "混合气",
+      "welding_current_a": 180.0,
+      "welding_voltage_v": 22.0,
+      "welding_speed_mm_s": 5.0,
+      "retrieval_text": "MIG焊，不锈钢母材，板厚8mm，角接接头，立焊位置，焊丝直径1.0mm，混合保护气体",
+      "conditions": [
+        "condition:smoke_position_changed"
+      ],
+      "parameters": [
+        "parameter:smoke_welding_current"
+      ],
+      "results": [
+        "quality:smoke_spatter"
+      ]
+    },
+    {
+      "case_id": "case_smoke_004",
+      "process": "MIG",
+      "material": "Q235",
+      "thickness_mm": 10.0,
+      "joint_type": "对接",
+      "position": "平焊",
+      "wire_diameter_mm": 1.6,
+      "shielding_gas": "CO2",
+      "welding_current_a": 300.0,
+      "welding_voltage_v": 30.0,
+      "welding_speed_mm_s": 6.0,
+      "retrieval_text": "MIG焊，Q235低碳钢，板厚10mm，对接接头，平焊位置，焊丝直径1.6mm，CO2保护气体",
+      "conditions": [
+        "condition:smoke_thickness_increase",
+        "condition:smoke_wire_diameter_increase"
+      ],
+      "parameters": [
+        "parameter:smoke_welding_current",
+        "parameter:smoke_welding_voltage",
+        "parameter:smoke_welding_speed"
+      ],
+      "results": [
+        "quality:smoke_penetration"
+      ]
+    }
+  ]
+}

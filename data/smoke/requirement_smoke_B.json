@@ -1,0 +1,11 @@
+{
+  "_comment": "冒烟需求B（SYNTHETIC）：板厚 10mm，与 case_smoke_002 产生 thickness_increase 差异，用于验证差异计算与多跳路径查询。",
+  "process": "MIG",
+  "material": "Q235",
+  "thickness_mm": 10.0,
+  "joint_type": "对接",
+  "position": "平焊",
+  "wire_diameter_mm": 1.2,
+  "shielding_gas": "CO2",
+  "target_quality": "penetration"
+}
